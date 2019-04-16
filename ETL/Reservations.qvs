@@ -1,0 +1,12 @@
+Reservations:
+LOAD COUNT(ReservationNumber) as Reservations
+     ,FirstNight
+     ,Area
+     ,SiteGroup
+     ,Roomtype_Orig
+     
+FROM [lib://Bases de Datos/ReservacionesTSW_Unicas.qvd]
+(qvd) WHERE Año>=2015 AND ReservationStatus<>'Canceled' AND Deposits='No' AND [No Show]='No'
+      GROUP BY Area,SiteGroup,Roomtype_Orig,FirstNight
+      ;
+Store Reservations into [lib://ModelosBA/Reservations_Work.csv](txt);
