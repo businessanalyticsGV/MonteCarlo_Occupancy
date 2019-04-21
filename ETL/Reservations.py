@@ -18,7 +18,8 @@ ls_cols = ls_cols + [ls_targ]
 df = pd.read_csv(path+'Reservations.csv')
 df = df[(df['Año']>=2015) & (df['ReservationStatus']!='Canceled') & (df['Deposits']=='No') & (df['NoShow']=='No')]
 df = df.groupby([c for c in ls_cols if c != ls_targ], as_index = False)[[ls_targ]].count()
-df.to_csv('training.csv', index = False)
+df.rename(columns = {ls_targ:'Reservations'}, inplace = True)
+df.to_csv('training.txt', index = False)
 
 print(time.time()-start)
 
