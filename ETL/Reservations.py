@@ -12,7 +12,7 @@ import numpy as np
 
 path = 'C:/Users/alexisalvarez/OneDrive - Grupo Vidanta/UPDATE/Work/00. QVDs/Extraction/DBs/'
 
-ls_cols = ['FirstNight','Area','SiteGroup','Roomtype_Orig','Semana_Myn']
+ls_cols = ['FirstNight','Area','SiteGroup','Roomtype','Semana_Myn']
 ls_targ = '%ReservationNumber'
 ls_cols = ls_cols + [ls_targ]
 df = pd.read_csv(path+'Reservations.csv')
