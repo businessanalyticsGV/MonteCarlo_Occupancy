@@ -1,3 +1,11 @@
+Fechas:
+LOAD
+    Fecha as FirstNight
+FROM [lib://Catalogos/Catalog Fecha.xlsx]
+(ooxml, embedded labels, table is Hoja1) Where Fecha>='01/01/2017' and Fecha<='31/12/2017';
+
+Left Join
+
 Reservations:
 LOAD COUNT(ReservationNumber) as Reservations
      ,FirstNight
@@ -13,4 +21,4 @@ FROM [lib://Bases de Datos/ReservacionesTSW_Unicas.qvd]
 (qvd) WHERE Año>=2015 AND ReservationStatus<>'Canceled' AND Deposits='No' AND [No Show]='No'
       GROUP BY Area,SiteGroup,RoomType,FirstNight,Mix_NA_IN,Semana_Myn,"Temp Nal","Season Int"
       ;
-Store Reservations into [lib://ModelosBA/Reservations_Work.csv](txt);
+Store Fechas into [lib://ModelosBA/Reservations_Work.csv](txt);
