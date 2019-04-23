@@ -1,50 +1,33 @@
-##############################################
-########### DESEASONILIZING FRAME ############
-##############################################
-
-### 0.- LOADING EXTRACTION
+#### I.- EXTRACCIÓN
 import pandas as pd
 import numpy as np
-import os
 pd.set_option('display.max_columns',500)
 
-os.chdir('../ETL')
-file = [f for f in os.listdir() if f[-4:] == '.csv'][0]
-df = pd.read_csv(file)
-df['FirstNight'] = pd.to_datetime(df['FirstNight'])
+df = pd.read_csv('../ETL/Reservations_Work.csv')
 
-##################################################
-############## PIVOT #############################
-##################################################
-# temp = 'IN'
-df = df[(df['Area'] == 'Nuevo Vallarta') & (df['SiteGroup'] == 'The Grand Mayan') & \
-        (df['Roomtype_Orig'] == 'Grand Mayan Master Room') & (df['Mix_NA_IN'] == 'IN') &\
-        (df['FirstNight']>='01/01/2017') & (df['FirstNight']<='31/12/2017')]
+###### DEJARLO COMO EL LAYOUT #################
+area = 'Nuevo Vallarta'
+sitegroup = 'The Grand Mayan'
+roomtype = 'Grand Mayan Suite'|
+mix = 'IN'
+season = ['Season Int' if mix == 'IN' else 'Temp Nal' for i in range(1)][0]
 
-# temp = ['Season Int' if temp == 'IN' else 'Temp Nal' for temp in list(df['Mix_NA_IN'])[0]]
-# print(temp)
-#################################################
-##################################################
-##################################################
+df = df[(df['Area'] == area) & \
+    (df['SiteGroup'] == sitegroup) & \
+    (df['RoomType'] == roomtype) & \
+    (df['Mix_NA_IN'] == mix)].reset_index(drop = True)
 
-df = df[['FirstNight','Nights','Semana_Myn','Season Int','Reservations']]
+df['FirstNight'] = pd.to_datetime(df['FirstNight'],format = '%d/%m/%Y')
+df['Year'] = [d.year for d in df['FirstNight']]
+df['Weekday'] = [d.isoweekday() - 4 if d.isoweekday() >= 5 else \
+                 d.isoweekday() + 3 for d in df['FirstNight']]
 
-#### I.- Savg(t)
-
-# 
-df_card = df.groupby(['Season Int'], as_index = False)[['FirstNight']].count()
-df_card.rename(columns ={'FirstNight':'Card'}, inplace =True)
-print(df_card)
-exit()
-df = df.merge(df_card,how='left', on = ['Season Int'])
-
+ls_cols = ['FirstNight',season,'Reservations',
+           'Semana_Myn','Weekday','Year']
+df = df[ls_cols]
 print(df.shape)
 print(df.head())
-print(min(df['FirstNight']))
-print(max(df['FirstNight']))
 
-
-
-
+################ ESTO SE BORRA #########################
 
 
