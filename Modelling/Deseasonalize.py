@@ -61,11 +61,20 @@ df['Card'] = np.where(pd.notnull(df['Card']),1/df['Cardinality'],np.nan)
 df = df.drop(columns = ['Cardinality'], axis = 1)
 
     ## B) MEDIA MÓVIL
+    #### ADJACENT
 orden = 30 #<---------------------------------------- __INIT__
 df['AvgStTau'] = [df['Reservations'][\
     (df['FirstNight'] >= datetime.datetime(d.year,d.month,d.day)+td(days = -orden))  & \
     (df['FirstNight'] <= d)].mean() if card >= 0 else np.nan \
                   for d,card in zip(df['FirstNight'],df['Card'])]
+
+    #### MIRROR
+
+# df['AvgStTau'] = [datetime.datetime(d.year-1,d.month,1) \
+#                   if card >= 0 else np.nan for d,card in zip(df['FirstNight'],df['Card'])]
+
+# print(df[pd.notnull(df['Card'])].head())
+# exit()
 
     ## C) NUMERADOR
 df['Num'] = [sum(np.array(df['Reservations'][(df[season] == temp) & (df['Card'] >= 0)])/avg) \
@@ -75,7 +84,7 @@ df['Sdes1'] = df['Reservations']/(df['Card']*df['Num'])
 
 import matplotlib.pyplot as plt
 plt.plot(df['Reservations'])
-plt.plot(df['Sdes1'])
+# plt.plot(df['Sdes1'])
 plt.plot(df['AvgStTau'])
 plt.show()
 print(df.shape)
