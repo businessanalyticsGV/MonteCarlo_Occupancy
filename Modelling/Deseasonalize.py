@@ -12,7 +12,7 @@ df = pd.read_csv('../ETL/Reservations_Work.csv')
 area = 'Nuevo Vallarta'
 sitegroup = 'The Grand Mayan'
 roomtype = 'Grand Mayan Suite'
-mix = 'NA'
+mix = 'IN'
 mix = [list(df['Mix_NA_IN'] == 'IN') if mix == 'IN' else list(df['Mix_NA_IN'] != 'IN')\
        for i in range(1)][0]
 season = ['Season Int' if mix == 'IN' else 'Temp Nal' for i in range(1)][0]
@@ -61,7 +61,7 @@ df['Card'] = np.where(pd.notnull(df['Card']),1/df['Cardinality'],np.nan)
 df = df.drop(columns = ['Cardinality'], axis = 1)
 
     ## B) MEDIA MÓVIL
-    #### ADJACENT
+    #### ADJACENT #<-----------------------------------__INIT__
 orden = 30 #<---------------------------------------- __INIT__
 df['AvgStTau'] = [df['Reservations'][\
     (df['FirstNight'] >= datetime.datetime(d.year,d.month,d.day)+td(days = -orden))  & \
